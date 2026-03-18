@@ -1,37 +1,34 @@
-# Análisis de Mantenimiento y Eficiencia Energética
+# Proyecto de Monitoreo y Mantenimiento Predictivo
 
-Este proyecto analiza un dataset de mantenimiento industrial para identificar patrones de fallo y optimizar el consumo eléctrico de la maquinaria.
+Este proyecto automatiza el ciclo completo de datos (ETL, almacenamiento y análisis) de sensores industriales para identificar patrones de fallo y optimizar el consumo de maquinaria. Basado en un dataset de mantenimiento preventivo, el objetivo es transformar registros brutos en decisiones de negocio.
 
-## Fase 1: Preparación y limpieza de datos (Python)
+## Tecnologías utilizadas
+* **Python**: Pandas para procesamiento y Seaborn/Matplotlib para visualización.
+* **MySQL**: Almacenamiento y gestión de datos relacionales.
+* **SQLAlchemy**: Librería para la conexión eficiente entre Python y SQL.
 
-En esta primera etapa, he procesado los datos brutos utilizando Python y la librería Pandas para asegurar su calidad y extraer métricas de valor:
+## Hallazgos y Conclusiones del Análisis
+Tras procesar 10,000 registros de sensores, se extraen las siguientes conclusiones:
 
-* **Limpieza y normalización:** He eliminado las columnas de identificación que no aportaban valor estadístico y he renombrado las variables para facilitar su manipulación.
+1. **Indicador de Fallo:** Una máquina con consumo ineficiente tiene **3.7 veces más probabilidades de fallar**. El sobreconsumo se establece como el principal KPI preventivo.
 
-* **Ingeniería de variables:** He calculado una estimación de consumo energético (kWh) combinando los datos de Torque y Velocidad.
+2. **Correlación de Consumo:** Existe una relación del **0.98** entre el **Torque** y el **Consumo Estimado**. La optimización del par de fuerza es clave para el ahorro energético.
 
-* **Detección de ineficiencias:** He creado una lógica para identificar automáticamente las máquinas que operan con un gasto superior a la media de la planta.
+3. **Fragilidad por Modelo:** Las máquinas de tipo "Low" (L) concentran la mayoría de fallos, destacando causas como el **Sobreesfuerzo** y la **Disipación de Calor**.
 
+4. **Análisis Multivariable:** Aunque la temperatura media en fallo es de **310 K**, su correlación individual con las averías es muy baja (0.04), indicando que el fallo depende de la combinación de múltiples factores.
 
-## Fase 2: Análisis de Datos con SQL
+## Visualizaciones Destacadas
+![Análisis de Fallos](./reports/fallos.png)
+![Matriz de Correlación](./reports/correlacion.png)
 
-En esta etapa, he migrado los datos limpios a **MySQL** para realizar un análisis de patrones de fallo. Mi objetivo ha sido cruzar la eficiencia energética con la operatividad real para extraer conclusiones accionables:
+## Estructura del Proyecto
+* `data/`: Dataset original de sensores industriales.
+* `sql/`: Scripts de creación de tablas en MySQL.
+* `scripts/`: 
+    * `database_upload.py`: Automatización de la carga de datos.
+    * `analisis_visual.py`: Generación de matrices de correlación y gráficos de fallos.
+    * `generar_reporte.py`: Exportación de máquinas en estado crítico a CSV.
 
-### Mis conclusiones del análisis:
-
-**1. Distribución de carga y consumo**
-He observado que las máquinas **Tipo L (Low)** soportan el mayor peso de la planta, con un consumo acumulado de **359,975 unidades**. Aunque el gasto medio es similar en todas las categorías (~60 unidades), el volumen de estas máquinas las convierte en el punto crítico para cualquier estrategia de ahorro energético.
-
-**2. Relación entre eficiencia y fiabilidad**
-Los datos revelan una conexión clara entre el consumo anómalo y las averías:
-* He identificado que las máquinas con **Gasto Excesivo** acumulan **268 fallos**, frente a solo **71** registrados en las máquinas eficientes.
-* **Resultado:** He determinado que una máquina ineficiente tiene **3.7 veces más probabilidades** de fallar, lo que convierte al sobreconsumo en mi KPI principal para alertas preventivas.
-
-**3. Patrones de temperatura y criticidad por modelo**
-He analizado la temperatura en los momentos de fallo, situándose de media en los **310 K**. Al ser un valor tan estable en todos los tipos de máquina, concluyo que el riesgo no es puramente térmico, sino que está ligado a la carga de trabajo:
-* Las máquinas **Tipo L** concentran la gran mayoría de las incidencias con **235 fallos**.
-* Por el contrario, las máquinas **Tipo H** demuestran ser las más fiables con solo **21 fallos**, confirmando que el diseño térmico es consistente en toda la flota pero el desgaste varía según el modelo.
-
-## Próximas Fases del Proyecto
-* **Fase 3:** Visualización avanzada de distribuciones y correlaciones con Python (Seaborn/Matplotlib).
-* **Fase 4:** Diseño de un Dashboard interactivo en Power BI conectado a la base de datos SQL.
+## Próximos Pasos
+* **Fase 4:** Diseño de un Dashboard interactivo en Power BI conectado a la base de datos SQL para monitoreo en tiempo real.
