@@ -11,15 +11,20 @@ Este proyecto automatiza el ciclo completo de datos (ETL, almacenamiento y anál
 ## Hallazgos y Conclusiones del Análisis
 Tras procesar 10,000 registros de sensores y analizar los resultados en SQL y Power BI, se extraen las siguientes conclusiones:
 
-1. **Indicador de Fallo Energético:** Una máquina con consumo ineficiente tiene **3.7 veces más probabilidades de fallar**. El sobreconsumo se establece como el principal KPI preventivo para el sistema de alertas.
+1. **Índice de Sobreesfuerzo Mecánico:** Las máquinas que operan con un **Índice de Esfuerzo Mecánico** elevado presentan **3.7 veces más probabilidades de fallar**. Este índice se convierte en el principal KPI preventivo para activar alertas tempranas.
 
-2. **Correlación de Consumo:** Existe una relación del **0.98** entre el **Torque** y el **Consumo Estimado**. La optimización del par de fuerza es la clave directa para el ahorro energético en planta.
+2. **Correlación Operativa:** Se observa una correlación del **0.98** entre el **Torque** y el **Índice de Esfuerzo Mecánico**, lo que confirma que el par de fuerza es el factor más determinante en el desgaste y la aparición de fallos.
 
 3. **Nivel de Riesgo por Modelo:** Las máquinas de tipo "Low" (L) concentran la gran mayoría de las incidencias (**235 fallos**), destacando causas como el **Sobreesfuerzo**.
 
-4. **Fuga de Eficiencia:** Los modelos Tipo L representan el **72.43% del desgaste** total de la planta. Esto confirma que la gama baja es el principal factor de riesgo operativo, a pesar de mantener un consumo medio similar a las gamas superiores.
+4. **Fuga de Eficiencia:** Los modelos Tipo L concentran aproximadamente el **60.24% del desgaste total** de la planta. Aunque representan el **60% de las máquinas**, su contribución al desgaste es ligeramente superior, lo que confirma que la gama baja es la que más sufre bajo condiciones de carga elevadas.
 
 5. **Tasa de Fallo Global:** Se ha identificado una tasa de fallo de planta del **3.39%**, monitorizada dinámicamente mediante el dashboard.
+
+## Definición del Índice de Esfuerzo Mecánico
+El dataset no incluye información eléctrica ni temporal suficiente para calcular energía real.
+Por ello, se utiliza un índice de esfuerzo mecánico, basado en la combinación de Torque y Velocidad, que permite identificar cuándo una máquina está trabajando por encima de su nivel habitual.
+Este indicador no representa energía física, pero sí refleja cuánta carga está soportando el motor, y resulta muy útil para anticipar fallos por sobreesfuerzo.
 
 ## Visualizaciones Destacadas
 
@@ -28,7 +33,7 @@ Tras procesar 10,000 registros de sensores y analizar los resultados en SQL y Po
 *Gráfico de barras: Identificación de la fragilidad del modelo 'L' ante picos de sobreesfuerzo.*
 
 ![Matriz de Correlación](./reports/correlacion.png)
-*Mapa de calor: Identificación del Torque como el principal responsable del consumo eléctrico.*
+*Mapa de calor: Identificación del Torque como el principal responsable del esfuerzo mecánico.*
 
 ### Dashboard Ejecutivo (Power BI)
 ![Dashboard Interactivo](./reports/Monitorizacion_Mantenimiento.png)
@@ -46,4 +51,4 @@ Tras procesar 10,000 registros de sensores y analizar los resultados en SQL y Po
 
 ## Conclusiones y Recomendaciones Proyectadas
 1. **Optimización de Activos:** Se recomienda la sustitución progresiva de los modelos Tipo L por modelos Tipo M en procesos de alto Torque, con un potencial de reducción de paradas por sobreesfuerzo del **85%**.
-2. **Escalabilidad del Pipeline:** La arquitectura implementada (Python -> MySQL -> Power BI) permite una monitorización continua. Se establece que un aumento del 10% en el KPI de **Consumo Estimado** sin variaciones en la producción debe activar un protocolo de inspección preventiva.
+2. **Escalabilidad del Pipeline:** La arquitectura implementada (Python -> MySQL -> Power BI) permite una monitorización continua. Se establece que un aumento del 10% en el KPI de **Índice de Esfuerzo Mecánico** sin variaciones en la producción debe activar un protocolo de inspección preventiva.

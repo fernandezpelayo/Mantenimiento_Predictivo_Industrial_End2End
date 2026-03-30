@@ -21,18 +21,21 @@ print(df_mantenimiento.head())
 #MÉTRICAS DE CONSUMO DE ENERGÍA
 
 # Estimar el consumo (kWh) usando Torque y Velocidad como indicadores
-df_mantenimiento['Consumo_Estimado'] = (
-        df_mantenimiento['Torque'] * df_mantenimiento['Velocidad']) / 1000
+df_mantenimiento['Indice_Esfuerzo_Mecanico'] = (
+        df_mantenimiento['Torque'] * df_mantenimiento['Velocidad'])
 
 
 # Marcar las máquinas que superan el consumo medio
-media_consumo = df_mantenimiento['Consumo_Estimado'].mean()
+media_consumo = df_mantenimiento['Indice_Esfuerzo_Mecanico'].mean()
 
-df_mantenimiento['Gasto_Excesivo'] = (df_mantenimiento['Consumo_Estimado'] > media_consumo)
+df_mantenimiento['Gasto_Excesivo'] = (
+    df_mantenimiento['Indice_Esfuerzo_Mecanico'] > media_consumo)
 
 
 print(f"\nMedia de consumo calculada: {media_consumo:.2f}")
-print(df_mantenimiento[['Tipo', 'Consumo_Estimado', 'Gasto_Excesivo']].head())
+print(df_mantenimiento[['Tipo', 'Indice_Esfuerzo_Mecanico', 'Gasto_Excesivo']].head())
 
 #Guardar el dataset para el análisis posterior
 df_mantenimiento.to_csv('data/mantenimiento_procesado.csv', index=False)
+
+
